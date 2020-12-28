@@ -385,11 +385,12 @@ class InterfaceMenu extends Component {
             case "api_to_cat":
                 axios.post('/api/interface/up', {id: dragKey, catid: dropObj._id});
                 break;
-            default:
+            default: {
                 // 同一个分类下的接口交换顺序
                 let colList = list[dropCatIndex].list;
                 changes = arrayChangeIndex(colList, dragKey, dropKey);
                 axios.post('/api/interface/up_index', changes).then();
+            }
         }
         this.props.fetchInterfaceListMenu(this.props.projectId);
 

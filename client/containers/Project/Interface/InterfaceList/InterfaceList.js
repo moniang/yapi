@@ -21,6 +21,7 @@ const limit = 20;
 
 const EditableContext = React.createContext();
 
+// eslint-disable-next-line react/prop-types,no-unused-vars
 const EditableRow = ({ form, index, ...props }) => (
   <EditableContext.Provider value={form}>
     <tr {...props} />
@@ -42,6 +43,7 @@ class EditableCell extends React.Component {
   };
 
   save = e => {
+    // eslint-disable-next-line react/prop-types
     const { record, handleSave } = this.props;
     this.form.validateFields((error, values) => {
       if (error && error[e.currentTarget.id]) {
@@ -54,6 +56,7 @@ class EditableCell extends React.Component {
 
   renderCell = form => {
     this.form = form;
+    // eslint-disable-next-line react/prop-types
     const { children, dataIndex, record, title } = this.props;
     const { editing } = this.state;
     return editing ? (
@@ -81,14 +84,8 @@ class EditableCell extends React.Component {
 
   render() {
     const {
-      editable,
-      dataIndex,
-      title,
-      record,
-      index,
-      handleSave,
-      children,
-      ...restProps
+      // eslint-disable-next-line react/prop-types,no-unused-vars
+      editable,dataIndex,title,record,index,handleSave,children, ...restProps
     } = this.props;
     return (
       <td {...restProps}>

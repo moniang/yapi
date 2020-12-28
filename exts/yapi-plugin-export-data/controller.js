@@ -17,10 +17,10 @@ class exportController extends baseController {
     this.catModel = yapi.getInst(interfaceCatModel);
     this.interModel = yapi.getInst(interfaceModel);
     this.projectModel = yapi.getInst(projectModel);
-    
+
   }
 
-  listToTree = (oldArr) => {
+  listToTree(oldArr){
     oldArr.forEach(element => {
       let parent_id = element.parent_id;
       if(parent_id !== 0){
