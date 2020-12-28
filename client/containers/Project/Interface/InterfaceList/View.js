@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Table, Icon, Row, Col, Tooltip, message } from 'antd';
 import { Link } from 'react-router-dom';
-import AceEditor from 'client/components/AceEditor/AceEditor';
+import AceEditor from '../../../../components/AceEditor/AceEditor';
 import { formatTime, safeArray } from '../../../../common.js';
 import ErrMsg from '../../../../components/ErrMsg/ErrMsg.js';
 import variable from '../../../../constants/variable';
@@ -14,9 +14,10 @@ import SchemaTable from '../../../../components/SchemaTable/SchemaTable.js';
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer';
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 
-const HTTP_METHOD = constants.HTTP_METHOD;
 import 'highlight.js/styles/github.css';
 import 'codemirror/lib/codemirror.css'; // Editor's Dependency Style
+
+const HTTP_METHOD = constants.HTTP_METHOD;
 
 @connect(state => {
   return {
@@ -27,6 +28,7 @@ import 'codemirror/lib/codemirror.css'; // Editor's Dependency Style
 })
 class View extends Component {
   constructor(props) {
+
     super(props);
     this.state = {
       init: true,
@@ -47,7 +49,7 @@ class View extends Component {
           title: '参数名称',
           dataIndex: 'name',
           key: 'name',
-          width: 140
+          width: 350
         },
         {
           title: '参数类型',
@@ -109,12 +111,12 @@ class View extends Component {
       return (
         <div style={{ display: dataSource.length ? '' : 'none' }} className="colBody">
           <Table
-            bordered
-            size="small"
-            pagination={false}
-            columns={columns}
-            dataSource={dataSource}
-          />
+                bordered
+                size="small"
+                pagination={false}
+                columns={columns}
+                dataSource={dataSource}
+            />
         </div>
       );
     }
@@ -148,11 +150,11 @@ class View extends Component {
         return (
           <div className="colBody">
             <AceEditor
-              data={req_body_other}
-              readOnly={true}
-              style={{ minHeight: 300 }}
-              mode={req_body_type === 'json' ? 'javascript' : 'text'}
-            />
+                  data={req_body_other}
+                  readOnly={true}
+                  style={{ minHeight: 300 }}
+                  mode={req_body_type === 'json' ? 'javascript' : 'text'}
+              />
           </div>
         );
       }
@@ -223,13 +225,16 @@ class View extends Component {
     return c;
   }
 
+  UNSAFE_componentWillReceiveProps(data){
+    // console.log(this.props.curData)
+    if (this.state.viewer){
+      this.state.viewer.setMarkdown(data.curData.desc)
+    }
+  }
   componentDidMount() {
     if (!this.props.curData.title && this.state.init) {
       this.setState({ init: false });
     }
-
-    // 如果不加这个延迟，会报错，组件没有初始化完的那个报错
-    // 技术太菜，目前没有找到合适的生命周期，希望有缘人能优化掉它
     setTimeout(()=>{
       let viewer = new Viewer({
         el: document.querySelector('#descViews'),
@@ -366,21 +371,21 @@ class View extends Component {
     };
 
     let bodyShow =
-      this.props.curData.req_body_other ||
-      (this.props.curData.req_body_type === 'form' &&
-        this.props.curData.req_body_form &&
-        this.props.curData.req_body_form.length);
+        this.props.curData.req_body_other ||
+        (this.props.curData.req_body_type === 'form' &&
+            this.props.curData.req_body_form &&
+            this.props.curData.req_body_form.length);
 
     let requestShow =
-      (dataSource && dataSource.length) ||
-      (req_dataSource && req_dataSource.length) ||
-      (this.props.curData.req_query && this.props.curData.req_query.length) ||
-      bodyShow;
+        (dataSource && dataSource.length) ||
+        (req_dataSource && req_dataSource.length) ||
+        (this.props.curData.req_query && this.props.curData.req_query.length) ||
+        bodyShow;
 
     let methodColor =
-      variable.METHOD_COLOR[
-        this.props.curData.method ? this.props.curData.method.toLowerCase() : 'get'
-      ];
+        variable.METHOD_COLOR[
+            this.props.curData.method ? this.props.curData.method.toLowerCase() : 'get'
+            ];
 
     // statusColor = statusColor[this.props.curData.status?this.props.curData.status.toLowerCase():"undone"];
     // const aceEditor = <div style={{ display: this.props.curData.req_body_other && (this.props.curData.req_body_type !== "form") ? "block" : "none" }} className="colBody">
@@ -395,18 +400,18 @@ class View extends Component {
     let res = (
       <div className="caseContainer">
         <h2 className="interface-title" style={{ marginTop: 0 }}>
-          基本信息
+            基本信息
         </h2>
         <div className="panel-view">
           <Row className="row">
             <Col span={4} className="colKey">
-              接口名称：
+                接口名称：
             </Col>
             <Col span={8} className="colName">
               {title}
             </Col>
             <Col span={4} className="colKey">
-              创&ensp;建&ensp;人：
+                创&ensp;建&ensp;人：
             </Col>
             <Col span={8} className="colValue">
               <Link className="user-name" to={'/user/profile/' + uid}>
@@ -417,40 +422,40 @@ class View extends Component {
           </Row>
           <Row className="row">
             <Col span={4} className="colKey">
-              状&emsp;&emsp;态：
+                状&emsp;&emsp;态：
             </Col>
             <Col span={8} className={'tag-status ' + this.props.curData.status}>
               {status[this.props.curData.status]}
             </Col>
             <Col span={4} className="colKey">
-              更新时间：
+                更新时间：
             </Col>
             <Col span={8}>{formatTime(up_time)}</Col>
           </Row>
           {safeArray(tag) &&
             safeArray(tag).length > 0 && (
-              <Row className="row remark">
-                <Col span={4} className="colKey">
-                  Tag ：
-                </Col>
-                <Col span={18} className="colValue">
-                  {tag.join(' , ')}
-                </Col>
-              </Row>
+            <Row className="row remark">
+              <Col span={4} className="colKey">
+                    Tag ：
+              </Col>
+              <Col span={18} className="colValue">
+                {tag.join(' , ')}
+              </Col>
+            </Row>
             )}
           <Row className="row">
             <Col span={4} className="colKey">
-              接口路径：
+                接口路径：
             </Col>
             <Col
-              span={18}
-              className="colValue"
-              onMouseEnter={this.enterItem}
-              onMouseLeave={this.leaveItem}
-            >
+                  span={18}
+                  className="colValue"
+                  onMouseEnter={this.enterItem}
+                  onMouseLeave={this.leaveItem}
+              >
               <span
-                style={{ color: methodColor.color, backgroundColor: methodColor.bac }}
-                className="colValue tag-method"
+                  style={{ color: methodColor.color, backgroundColor: methodColor.bac }}
+                  className="colValue tag-method"
               >
                 {this.props.curData.method}
               </span>
@@ -460,134 +465,133 @@ class View extends Component {
               </span>
               <Tooltip title="复制路径">
                 <Icon
-                  type="copy"
-                  className="interface-url-icon"
-                  onClick={() => this.copyUrl(this.props.currProject.basepath + this.props.curData.path)}
-                  style={{ display: this.state.enter ? 'inline-block' : 'none' }}
-                />
+                      type="copy"
+                      className="interface-url-icon"
+                      onClick={() => this.copyUrl(this.props.currProject.basepath + this.props.curData.path)}
+                      style={{ display: this.state.enter ? 'inline-block' : 'none' }}
+                  />
               </Tooltip>
             </Col>
           </Row>
           <Row className="row">
             <Col span={4} className="colKey">
-              Mock地址：
+                Mock地址：
             </Col>
             <Col span={18} className="colValue">
               {this.flagMsg(this.props.currProject.is_mock_open, this.props.currProject.strice)}
               <span
-                className="href"
-                onClick={() =>
-                  window.open(
-                    location.protocol +
-                      '//' +
-                      location.hostname +
-                      (location.port !== '' ? ':' + location.port : '') +
-                      `/mock/${this.props.currProject._id}${this.props.currProject.basepath}${
-                        this.props.curData.path
-                      }`,
-                    '_blank'
-                  )
-                }
-              >
+                    className="href"
+                    onClick={() =>
+                        window.open(
+                            location.protocol +
+                            '//' +
+                            location.hostname +
+                            (location.port !== '' ? ':' + location.port : '') +
+                            `/mock/${this.props.currProject._id}${this.props.currProject.basepath}${
+                                this.props.curData.path
+                            }`,
+                            '_blank'
+                        )
+                    }
+                >
                 {location.protocol +
-                  '//' +
-                  location.hostname +
-                  (location.port !== '' ? ':' + location.port : '') +
-                  `/mock/${this.props.currProject._id}${this.props.currProject.basepath}${
+                '//' +
+                location.hostname +
+                (location.port !== '' ? ':' + location.port : '') +
+                `/mock/${this.props.currProject._id}${this.props.currProject.basepath}${
                     this.props.curData.path
-                  }`}
+                }`}
               </span>
             </Col>
           </Row>
           {this.props.curData.custom_field_value &&
             this.props.custom_field.enable && (
-              <Row className="row remark">
-                <Col span={4} className="colKey">
-                  {this.props.custom_field.name}：
-                </Col>
-                <Col span={18} className="colValue">
-                  {this.props.curData.custom_field_value}
-                </Col>
-              </Row>
+            <Row className="row remark">
+              <Col span={4} className="colKey">
+                {this.props.custom_field.name}：
+              </Col>
+              <Col span={18} className="colValue">
+                {this.props.curData.custom_field_value}
+              </Col>
+            </Row>
             )}
         </div>
         <h2 className="interface-title" style={{ display: requestShow ? '' : 'none' }}>
-          请求参数
+            请求参数
         </h2>
         {req_dataSource.length ? (
           <div className="colHeader">
             <h3 className="col-title">路径参数：</h3>
             <Table
-              bordered
-              size="small"
-              pagination={false}
-              columns={req_params_columns}
-              dataSource={req_dataSource}
-            />
+                    bordered
+                    size="small"
+                    pagination={false}
+                    columns={req_params_columns}
+                    dataSource={req_dataSource}
+                />
           </div>
-        ) : (
-          ''
-        )}
+          ) : (
+              ''
+          )}
         {dataSource.length ? (
           <div className="colHeader">
             <h3 className="col-title">Headers：</h3>
             <Table
-              bordered
-              size="small"
-              pagination={false}
-              columns={columns}
-              dataSource={dataSource}
-            />
+                    bordered
+                    size="small"
+                    pagination={false}
+                    columns={columns}
+                    dataSource={dataSource}
+                />
           </div>
-        ) : (
-          ''
-        )}
+          ) : (
+              ''
+          )}
         {this.props.curData.req_query && this.props.curData.req_query.length ? (
           <div className="colQuery">
             <h3 className="col-title">Query：</h3>
             {this.req_query(this.props.curData.req_query)}
           </div>
-        ) : (
-          ''
-        )}
+          ) : (
+              ''
+          )}
 
         <div
-          style={{
-            display:
-              this.props.curData.method &&
-              HTTP_METHOD[this.props.curData.method.toUpperCase()].request_body
-                ? ''
-                : 'none'
-          }}
-        >
+              style={{
+                display:
+                    this.props.curData.method &&
+                    HTTP_METHOD[this.props.curData.method.toUpperCase()].request_body
+                        ? ''
+                        : 'none'
+              }}
+          >
           <h3 style={{ display: bodyShow ? '' : 'none' }} className="col-title">
-            Body:
+              Body:
           </h3>
           {this.props.curData.req_body_type === 'form'
-            ? this.req_body_form(this.props.curData.req_body_type, this.props.curData.req_body_form)
-            : this.req_body(
-                this.props.curData.req_body_type,
-                this.props.curData.req_body_other,
-                this.props.curData.req_body_is_json_schema
-              )}
+                ? this.req_body_form(this.props.curData.req_body_type, this.props.curData.req_body_form)
+                : this.req_body(
+                    this.props.curData.req_body_type,
+                    this.props.curData.req_body_other,
+                    this.props.curData.req_body_is_json_schema
+                )}
         </div>
 
         <h2 className="interface-title">返回数据</h2>
         {this.res_body(
-          this.props.curData.res_body_type,
-          this.props.curData.res_body,
-          this.props.curData.res_body_is_json_schema
-        )}
+              this.props.curData.res_body_type,
+              this.props.curData.res_body,
+              this.props.curData.res_body_is_json_schema
+          )}
 
         {this.props.curData.desc && <h2 className="interface-title">备注</h2>}
         {this.props.curData.desc && (
-        <div
-                id = "descViews"
-                className="tui-editor-contents"
-                style={{ margin: '0px', padding: '0px 20px', float: 'none' }}
-                dangerouslySetInnerHTML={{ __html: this.props.curData.desc }}
-            />
-        )}
+          <div
+                  id = "descViews"
+                  className="tui-editor-contents"
+                  style={{ margin: '0px', padding: '0px 20px', float: 'none' }}
+              />
+          )}
       </div>
     );
 
