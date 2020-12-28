@@ -464,7 +464,7 @@ class InterfaceColContent extends Component {
   }
 
   onChangeTest = d => {
-    
+
     this.setState({
       commonSetting: {
         ...this.state.commonSetting,
@@ -613,7 +613,7 @@ class InterfaceColContent extends Component {
       ...setting
 
     };
-    console.log(params)
+    // console.log(params)
 
     axios.post('/api/col/up_col', params).then(async res => {
       if (res.data.errcode) {
@@ -657,7 +657,7 @@ class InterfaceColContent extends Component {
       })
     }
   }
-  
+
   render() {
     const currProjectId = this.props.currProject._id;
     const columns = [
@@ -1231,7 +1231,7 @@ class InterfaceColContent extends Component {
             </Row>
             <Row type="flex" justify="space-around" className="row" align="middle">
               <Col span={21} className="autoTestUrl">
-                <a 
+                <a
                   target="_blank"
                   rel="noopener noreferrer"
                   href={localUrl + autoTestsUrl} >

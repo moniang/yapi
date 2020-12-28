@@ -461,7 +461,6 @@ class InterfaceList extends Component {
 
     const isDisabled = this.props.catList.length === 0;
 
-    // console.log(this.props.curProject.tag)
     const components = {
       body: {
         row: EditableFormRow,
@@ -501,9 +500,6 @@ class InterfaceList extends Component {
         <div style={{ marginTop: '10px' }}>
           <Label onChange={value => this.handleChangeInterfaceCat(value, intername)} desc={desc} />
         </div>
-        {
-          console.log(data)
-        }
         <Table
           className="table-interfacelist"
           pagination={pageConfig}

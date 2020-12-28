@@ -114,7 +114,7 @@ class ProjectData extends Component {
   uploadChange = info => {
     const status = info.file.status;
     if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
+
     }
     if (status === 'done') {
       message.success(`${info.file.name} 文件上传成功`);
@@ -485,7 +485,7 @@ class ProjectData extends Component {
                 {this.state.curExportType ? (
                   <div>
                     <p className="export-desc">{exportDataModule[this.state.curExportType].desc}</p>
-                    <a 
+                    <a
                       target="_blank"
                       rel="noopener noreferrer"
                       href={exportHref}>

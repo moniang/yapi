@@ -119,7 +119,6 @@ export default (state = initialState, action) => {
       };
     }
     case SET_IMAGE_URL: {
-      // console.log('state', state);
       return {
         ...state,
         imageUrl: action.data

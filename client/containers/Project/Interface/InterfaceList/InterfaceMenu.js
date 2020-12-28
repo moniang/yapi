@@ -328,7 +328,6 @@ class InterfaceMenu extends Component {
             }
         };
 
-        console.log(dragKey, dropKey);
         const data = [...this.state.list];
         // 0 cat to api
         // 1 cat to cat
@@ -368,7 +367,6 @@ class InterfaceMenu extends Component {
                 dropObj = item;
             });
         }
-        console.log(dragObj, dropObj, info.dropToGap);
         let changes;
         switch (dragType) {
             case "cat_to_api":
