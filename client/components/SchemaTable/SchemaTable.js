@@ -29,7 +29,7 @@ const columns = [
     title: '名称',
     dataIndex: 'name',
     key: 'name',
-    width: 200
+    width: 350
   },
   {
     title: '类型',
@@ -37,7 +37,6 @@ const columns = [
     key: 'type',
     width: 100,
     render: (text, item) => {
-      // console.log('text',item.sub);
       return text === 'array' ? (
         <span>{item.sub ? item.sub.itemType || '' : 'array'} []</span>
       ) : (
@@ -58,7 +57,7 @@ const columns = [
     title: '默认值',
     dataIndex: 'default',
     key: 'default',
-    width: 80,
+    width: 120  ,
     render: text => {
       return <div>{_.isBoolean(text) ? text + '' : text}</div>;
     }
@@ -110,6 +109,24 @@ class SchemaTable extends Component {
     super(props);
   }
 
+  checkChildrenIsEmpty(data) {
+    for (let i = 0;i<data.length;i++){
+      let value = data[i]
+
+      if (_.isEmpty(value.children)){
+        delete value.children
+      }else if (value.children !== undefined && _.isArray(value.children) && value.children.length > 0){
+        if (value.children[0].desc === undefined && value.children[0].default === undefined && value.children[0].name === undefined && value.children[0].required === undefined){
+          delete value.children
+        }else{
+          this.checkChildrenIsEmpty(value.children)
+        }
+      }
+    }
+
+    return data
+  }
+
   render() {
     let product;
     try {
@@ -122,6 +139,7 @@ class SchemaTable extends Component {
     }
     let data = schemaTransformToTable(product);
     data = _.isArray(data) ? data : [];
+    data = this.checkChildrenIsEmpty(data)
     return <Table bordered size="small" pagination={false} dataSource={data} columns={columns} />;
   }
 }

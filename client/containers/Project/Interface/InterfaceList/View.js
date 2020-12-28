@@ -493,14 +493,6 @@ class View extends Component {
               </Row>
             )}
         </div>
-        {this.props.curData.desc && <h2 className="interface-title">备注</h2>}
-        {this.props.curData.desc && (
-          <div
-            className="tui-editor-contents"
-            style={{ margin: '0px', padding: '0px 20px', float: 'none' }}
-            dangerouslySetInnerHTML={{ __html: this.props.curData.desc }}
-          />
-        )}
         <h2 className="interface-title" style={{ display: requestShow ? '' : 'none' }}>
           请求参数
         </h2>
@@ -567,6 +559,15 @@ class View extends Component {
           this.props.curData.res_body_type,
           this.props.curData.res_body,
           this.props.curData.res_body_is_json_schema
+        )}
+
+        {this.props.curData.desc && <h2 className="interface-title">备注</h2>}
+        {this.props.curData.desc && (
+        <div
+                className="tui-editor-contents"
+                style={{ margin: '0px', padding: '0px 20px', float: 'none' }}
+                dangerouslySetInnerHTML={{ __html: this.props.curData.desc }}
+            />
         )}
       </div>
     );
