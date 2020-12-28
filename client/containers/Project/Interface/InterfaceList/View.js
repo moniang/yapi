@@ -11,8 +11,12 @@ import variable from '../../../../constants/variable';
 import constants from '../../../../constants/variable.js';
 import copy from 'copy-to-clipboard';
 import SchemaTable from '../../../../components/SchemaTable/SchemaTable.js';
+import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 
 const HTTP_METHOD = constants.HTTP_METHOD;
+import 'highlight.js/styles/github.css';
+import 'codemirror/lib/codemirror.css'; // Editor's Dependency Style
 
 @connect(state => {
   return {
@@ -26,7 +30,8 @@ class View extends Component {
     super(props);
     this.state = {
       init: true,
-      enter: false
+      enter: false,
+      viewer:null
     };
   }
   static propTypes = {
@@ -222,6 +227,19 @@ class View extends Component {
     if (!this.props.curData.title && this.state.init) {
       this.setState({ init: false });
     }
+
+    // 如果不加这个延迟，会报错，组件没有初始化完的那个报错
+    // 技术太菜，目前没有找到合适的生命周期，希望有缘人能优化掉它
+    setTimeout(()=>{
+      let viewer = new Viewer({
+        el: document.querySelector('#descViews'),
+        initialValue: this.props.curData.desc,
+        plugins: [[codeSyntaxHighlight]]
+      });
+      this.setState({
+        viewer
+      })
+    },150)
   }
 
   enterItem = () => {
@@ -564,6 +582,7 @@ class View extends Component {
         {this.props.curData.desc && <h2 className="interface-title">备注</h2>}
         {this.props.curData.desc && (
         <div
+                id = "descViews"
                 className="tui-editor-contents"
                 style={{ margin: '0px', padding: '0px 20px', float: 'none' }}
                 dangerouslySetInnerHTML={{ __html: this.props.curData.desc }}

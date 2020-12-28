@@ -12,16 +12,23 @@ import mockEditor from 'client/components/AceEditor/mockEditor';
 import AceEditor from 'client/components/AceEditor/AceEditor';
 import axios from 'axios';
 import { MOCK_SOURCE } from '../../../../constants/variable.js';
-import Editor from 'common/tui-editor/dist/tui-editor-Editor-all.min.js';
+
 const jSchema = require('json-schema-editor-visual');
 const ResBodySchema = jSchema({ lang: 'zh_CN', mock: MOCK_SOURCE });
 const ReqBodySchema = jSchema({ lang: 'zh_CN', mock: MOCK_SOURCE });
 const TabPane = Tabs.TabPane;
 
+import Editor from '@toast-ui/editor';
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 
-require('common/tui-editor/dist/tui-editor.min.css'); // editor ui
-require('common/tui-editor/dist/tui-editor-contents.min.css'); // editor content
+import hljs from 'highlight.js';
+
+
 require('./editor.css');
+import 'highlight.js/styles/github.css';
+import 'codemirror/lib/codemirror.css'; // Editor's Dependency Style
+import '@toast-ui/editor/dist/toastui-editor.css';
+import '@toast-ui/editor/dist/i18n/zh-cn.js';
 
 
 function checkIsJsonSchema(json) {
@@ -386,8 +393,10 @@ class InterfaceEditForm extends Component {
     this.editor = new Editor({
       el: document.querySelector('#desc'),
       initialEditType: 'wysiwyg',
+      language:'zh-CN',
       height: '500px',
-      initialValue: this.state.markdown || this.state.desc
+      initialValue: this.state.markdown || this.state.desc,
+      plugins: [[codeSyntaxHighlight, { hljs }]]
     });
   }
 

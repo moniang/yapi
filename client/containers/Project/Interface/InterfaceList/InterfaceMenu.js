@@ -613,7 +613,7 @@ class InterfaceMenu extends Component {
                               </Tooltip>
                               <Tooltip title="添加子分类">
                                 <Icon
-                                            type="plus"
+                                            type="plus-circle"
                                             className="interface-delete-icon"
                                             onClick={e => {
                                                 e.stopPropagation();
